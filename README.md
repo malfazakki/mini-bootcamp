@@ -1,4 +1,4 @@
-# Hasil Backend Bootcamp - Day 3
+# Hasil Backend Bootcamp - Day 3 (Expense Tracker)
 
 Ini adalah contoh hasil akhir dari materi Backend dan Database (Hari ke-3). Proyek ini menggunakan **Node.js**, **Express**, dan **PostgreSQL**.
 
@@ -9,19 +9,19 @@ Ini adalah contoh hasil akhir dari materi Backend dan Database (Hari ke-3). Proy
 
 ## 🗄️ Persiapan Database
 
-Buat database baru bernama `latihan_db` dan jalankan perintah SQL berikut untuk membuat tabel berita:
+Buat database baru bernama `latihan_db` dan jalankan perintah SQL berikut untuk membuat tabel pengeluaran:
 
 ```sql
-CREATE TABLE berita (
+CREATE TABLE pengeluaran (
     id SERIAL PRIMARY KEY,
-    judul VARCHAR(255) NOT NULL,
-    isi TEXT
+    nama VARCHAR(255) NOT NULL,
+    nominal INTEGER NOT NULL
 );
 
 -- Tambahkan contoh data
-INSERT INTO berita (judul, isi) VALUES 
-('Belajar Node.js', 'Node.js sangat seru untuk dipelajari.'),
-('Express.js Mantap', 'Membuat API jadi jauh lebih mudah dengan Express.');
+INSERT INTO pengeluaran (nama, nominal) VALUES 
+('Beli Kopi', 15000),
+('Bensin', 50000);
 ```
 
 ## 🚀 Cara Menjalankan
@@ -31,23 +31,19 @@ INSERT INTO berita (judul, isi) VALUES
     ```bash
     npm install
     ```
-3.  Buat file `.env` di folder utama dan tambahkan baris berikut:
-    ```env
-    DATABASE_URL=postgresql://neondb_owner:npg_bPZ1Etx5YGjM@ep-royal-meadow-a19ojk7f-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
-    PORT=3000
-    ```
+3.  Buat file `.env` di folder utama dan isi dengan `DATABASE_URL` kamu.
 4.  Jalankan server:
     ```bash
     node server.js
     ```
-5.  API siap diakses di `http://localhost:3000/berita`.
+5.  API siap diakses di `http://localhost:3000/pengeluaran`.
 
 ## 📌 Endpoint API
 
 | Method | Endpoint | Keterangan |
 |--------|----------|------------|
-| GET | `/berita` | Melihat semua berita |
-| GET | `/berita/:id` | Melihat satu berita sesuai ID |
-| POST | `/berita` | Menambah berita baru |
-| PUT | `/berita/:id` | Mengubah isi berita |
-| DELETE | `/berita/:id` | Menghapus berita |
+| GET | `/pengeluaran` | Melihat semua data pengeluaran |
+| GET | `/pengeluaran/:id` | Melihat satu data sesuai ID |
+| POST | `/pengeluaran` | Menambah data pengeluaran baru |
+| PUT | `/pengeluaran/:id` | Mengubah data pengeluaran |
+| DELETE | `/pengeluaran/:id` | Menghapus data pengeluaran |

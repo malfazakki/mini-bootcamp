@@ -1,3 +1,4 @@
+
 const express = require("express");
 const db = require("./db.js");
 const app = express();
@@ -7,13 +8,13 @@ app.use(express.json()); // Middleware untuk membaca body JSON
 
 // 1. WELCOME ROUTE
 app.get("/", (req, res) => {
-    res.send("Selamat datang di API Berita!");
+    res.send("Selamat datang di API Expense Tracker!");
 });
 
-// 2. READ: Melihat semua berita dari database
-app.get("/berita", async (req, res) => {
+// 2. READ: Melihat semua pengeluaran dari database
+app.get("/pengeluaran", async (req, res) => {
     try {
-        const hasil = await db.query("SELECT * FROM berita ORDER BY id ASC");
+        const hasil = await db.query("SELECT * FROM pengeluaran ORDER BY id ASC");
         res.json(hasil.rows);
     } catch (err) {
         console.error(err);
@@ -21,15 +22,15 @@ app.get("/berita", async (req, res) => {
     }
 });
 
-// 3. READ ONE: Melihat satu berita berdasarkan ID
-app.get("/berita/:id", async (req, res) => {
+// 3. READ ONE: Melihat satu pengeluaran berdasarkan ID
+app.get("/pengeluaran/:id", async (req, res) => {
     const id = req.params.id;
     try {
-        const hasil = await db.query("SELECT * FROM berita WHERE id = $1", [id]);
+        const hasil = await db.query("SELECT * FROM pengeluaran WHERE id = $1", [id]);
         if (hasil.rows.length > 0) {
             res.json(hasil.rows[0]);
         } else {
-            res.status(404).send("Berita tidak ditemukan");
+            res.status(404).send("Data tidak ditemukan");
         }
     } catch (err) {
         console.error(err);
@@ -37,60 +38,56 @@ app.get("/berita/:id", async (req, res) => {
     }
 });
 
-// 4. CREATE: Menambah berita baru ke database
-app.post("/berita", async (req, res) => {
-    const { judul, isi } = req.body; // Mengambil judul dan isi dari body
+// 4. CREATE: Menambah pengeluaran baru ke database
+app.post("/pengeluaran", async (req, res) => {
+    const { nama, nominal } = req.body;
     try {
-        await db.query("INSERT INTO berita (judul, isi) VALUES ($1, $2)", [judul, isi]);
-        res.status(201).send("Berita berhasil ditambahkan!");
+        await db.query("INSERT INTO pengeluaran (nama, nominal) VALUES ($1, $2)", [nama, nominal]);
+        res.status(201).send("Data pengeluaran berhasil ditambahkan!");
     } catch (err) {
         console.error(err);
-        res.status(500).send("Gagal menambah berita");
+        res.status(500).send("Gagal menambah data");
     }
 });
 
-// 5. UPDATE: Mengubah berita berdasarkan ID
-app.put("/berita/:id", async (req, res) => {
+// 5. UPDATE: Mengubah pengeluaran berdasarkan ID
+app.put("/pengeluaran/:id", async (req, res) => {
     const id = req.params.id;
-    const { judul, isi } = req.body;
+    const { nama, nominal } = req.body;
     try {
         const hasil = await db.query(
-            "UPDATE berita SET judul = $1, isi = $2 WHERE id = $3",
-            [judul, isi, id]
+            "UPDATE pengeluaran SET nama = $1, nominal = $2 WHERE id = $3",
+            [nama, nominal, id]
         );
 
         if (hasil.rowCount > 0) {
-            res.send(`Berita ID ${id} berhasil diupdate!`);
+            res.send(`Data ID ${id} berhasil diupdate!`);
         } else {
-            res.status(404).send("Berita tidak ditemukan");
+            res.status(404).send("Data tidak ditemukan");
         }
     } catch (err) {
         console.error(err);
-        res.status(500).send("Gagal mengupdate berita");
+        res.status(500).send("Gagal mengupdate data");
     }
 });
 
-// 6. DELETE: Menghapus berita berdasarkan ID
-app.delete("/berita/:id", async (req, res) => {
+// 6. DELETE: Menghapus pengeluaran berdasarkan ID
+app.delete("/pengeluaran/:id", async (req, res) => {
     const id = req.params.id;
     try {
-        const hasil = await db.query("DELETE FROM berita WHERE id = $1", [id]);
+        const hasil = await db.query("DELETE FROM pengeluaran WHERE id = $1", [id]);
         if (hasil.rowCount > 0) {
-            res.send(`Berita ID ${id} berhasil dihapus!`);
+            res.send(`Data ID ${id} berhasil dihapus!`);
         } else {
-            res.status(404).send("Berita tidak ditemukan");
+            res.status(404).send("Data tidak ditemukan");
         }
     } catch (err) {
         console.error(err);
-        res.status(500).send("Gagal menghapus berita");
+        res.status(500).send("Gagal menghapus data");
     }
 });
 
-// Jalankan server jika tidak dideploy ke Vercel (serverless)
-if (process.env.NODE_ENV !== 'production') {
-    app.listen(port, () => {
-        console.log(`Server jalan di http://localhost:${port}`);
-    });
-}
-
-module.exports = app;
+// Jalankan server
+app.listen(port, () => {
+    console.log(`Server jalan di http://localhost:${port}`);
+});
