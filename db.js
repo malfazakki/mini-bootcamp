@@ -1,13 +1,12 @@
 require('dotenv').config();
-const { Client } = require('pg');
+const { Pool } = require('pg');
 
 // Menggunakan connection string dari environment variable
-const client = new Client({
+const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
-client.connect()
-    .then(() => console.log('Terhubung ke Database (Neon)!'))
-    .catch(err => console.error('Gagal konek ke database:', err));
-
-module.exports = client;
+module.exports = pool;

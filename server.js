@@ -86,7 +86,11 @@ app.delete("/berita/:id", async (req, res) => {
     }
 });
 
-// Jalankan server
-app.listen(port, () => {
-    console.log(`Server jalan di http://localhost:${port}`);
-});
+// Jalankan server jika tidak dideploy ke Vercel (serverless)
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => {
+        console.log(`Server jalan di http://localhost:${port}`);
+    });
+}
+
+module.exports = app;
